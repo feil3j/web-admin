@@ -1,4 +1,4 @@
-// 原创多媒体内容发布，内容存储在IPFS上
+// refer: github.com/ffhelicopter/tmm
 
 package main
 
