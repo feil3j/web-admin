@@ -9,7 +9,7 @@
 	router := gin.Default()
 
 	// 静态资源加载，本例为css,js以及资源图片
-	router.StaticFS("/public", http.Dir("D:/goproject/src/github.com/ffhelicopter/tmm/website/static"))
+	router.StaticFS("/public", http.Dir("D:/goproject/src/src/web-admin/internal/website/static"))
 	router.StaticFile("/favicon.ico", "./resources/favicon.ico")
 ```
 

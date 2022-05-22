@@ -6,7 +6,8 @@ package api
 import (
 	"net/http"
 
-	"github.com/ffhelicopter/tmm/model"
+	"src/web-admin/internal/model"
+
 	"github.com/gin-gonic/gin"
 )
 
