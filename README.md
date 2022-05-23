@@ -47,7 +47,7 @@ refer:
 	// 可以限定中间件的作用范围。大致分为全局中间件，单个处理程序中间件和组中间件。
 
 	// 使用全局CORS中间件。
-	// router.Use(Cors())
+	// router.Use(Handler.Cors())
 	// 即使是全局中间件，在use前的代码不受影响
 	// 也可在handler中局部使用，见api.GetUser
 
@@ -71,15 +71,15 @@ refer:
 	v1 := router.Group("/v1")
 	{
 		// 下面是组中间件的用法
-		// v1.Use(Cors())
+		// v1.Use(Handler.Cors())
 
 		// 单个中间件的用法
-		// v1.GET("/user/:id/*action",Cors(), api.GetUser)
+		// v1.GET("/user/:id/*action",Handler.Cors(), api.GetUser)
 
 		// rate-limit
 		v1.GET("/user/:id/*action", LimitHandler(lmt), api.GetUser)
 
-		//v1.GET("/user/:id/*action", Cors(), api.GetUser)
+		//v1.GET("/user/:id/*action", Handler.Cors(), api.GetUser)
 		// AJAX OPTIONS ，下面是有关OPTIONS用法的示例
 		// v1.OPTIONS("/users", OptionsUser)      // POST
 		// v1.OPTIONS("/users/:id", OptionsUser)  // PUT, DELETE

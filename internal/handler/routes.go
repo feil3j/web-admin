@@ -12,9 +12,9 @@ import (
 
 //路由表
 var routers = map[string][]interface{}{
-	"/index.html": []interface{}{"GET", player.IndexHandler},
-	"/add.html":   []interface{}{"GET", player.AddHandler},
-	"/post.html":  []interface{}{"GET", player.PostmeHandler},
+	"/index.html":         {"GET", player.IndexHandler},
+	"/player/:id/*action": {"GET", player.AddHandler},
+	"/player/post.html":   {"POST", player.PostmeHandler},
 }
 
 //注册路由
@@ -32,10 +32,18 @@ func RegisterHandlers(r *gin.RouterGroup) {
 			log.Fatalf("RegisterHandlers: method is not string, path=%s, data=%v.", path, data)
 		}
 		method := strings.ToUpper(tmp)
-		if method == "Get" {
+		if method == "GET" {
 			r.GET(path, h)
 		} else {
 			r.POST(path, h)
 		}
+	}
+}
+
+// 定义全局的CORS中间件
+func Cors() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Writer.Header().Add("Access-Control-Allow-Origin", "*")
+		c.Next()
 	}
 }
