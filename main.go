@@ -1,5 +1,3 @@
-// refer: github.com/ffhelicopter/tmm
-
 package main
 
 import (
@@ -38,12 +36,7 @@ func main() {
 
 	// website分组
 	v := router.Group("/")
-	{
-
-		v.GET("/index.html", handler.IndexHandler)
-		v.GET("/add.html", handler.AddHandler)
-		v.POST("/postme.html", handler.PostmeHandler)
-	}
+	handler.RegisterHandlers(v)
 
 	// 中间件 golang的net/http设计的一大特点就是特别容易构建中间件。
 	// gin也提供了类似的中间件。需要注意的是中间件只对注册过的路由函数起作用。

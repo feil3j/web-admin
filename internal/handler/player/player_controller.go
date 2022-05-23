@@ -1,6 +1,4 @@
-// 处理website站点路由请求的handler，考虑这里使用了模板，结合MVC使用的习惯，故以controller来命名。
-// 当然，API也可以都放在这里处理，但为了结构清晰，不提倡这么做。
-package handler
+package player
 
 import (
 	"net/http"

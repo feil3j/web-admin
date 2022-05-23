@@ -1,4 +1,8 @@
-# tmm
+# web-admin
+refer: 
+	github.com/ffhelicopter/tmm
+	github.com/zeromicro/go-zero
+
 快速搭建WEB站点以及提供RESTful接口 。
 
 ## 一：静态资源站点
