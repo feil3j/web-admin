@@ -61,7 +61,7 @@ func main() {
 
 	// 5秒后优雅Shutdown服务
 	quit := make(chan os.Signal)
-	signal.Notify(quit, os.Interrupt) //syscall.SIGKILL
+	signal.Notify(quit, os.Interrupt, os.Kill) //syscall.SIGINT
 	<-quit
 	log.Println("Shutdown Server ...")
 
