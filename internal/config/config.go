@@ -5,6 +5,8 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"path"
+	"runtime"
 )
 
 type Addr struct {
@@ -13,11 +15,17 @@ type Addr struct {
 }
 
 type Config struct {
-	Name   string `json:"name"`
-	Server Addr   `json:"addr"`
+	AdminRootPath string
+	Name          string `json:"name"`
+	Server        Addr   `json:"addr"`
 }
 
-var GlobalConfig = &Config{}
+var GlobalConfig *Config
+
+func init() {
+	GlobalConfig = &Config{}
+	GlobalConfig.AdminRootPath = getRootPath()
+}
 
 func LoadConfig(fileName *string) *Config {
 	file, err := os.Open(*fileName)
@@ -34,4 +42,14 @@ func LoadConfig(fileName *string) *Config {
 		log.Fatalf("loadConfig: json.Unmarshal error, fileName=%s, err=%v.", fileName, err)
 	}
 	return GlobalConfig
+}
+
+func getRootPath() string {
+	_, fileName, line, ok := runtime.Caller(0)
+	if !ok {
+		log.Fatalf("GetRootPath: runtime.Caller is error.")
+	}
+	rootPath := path.Dir(path.Dir(path.Dir(fileName)))
+	log.Printf("GetRootPath: rootPath=%s, fileName=%s, line=%d.", rootPath, fileName, line)
+	return rootPath
 }
