@@ -23,15 +23,16 @@ func RegisterHandlers(r *gin.RouterGroup) {
 		if len(data) != 2 {
 			log.Fatalf("RegisterHandlers: len(data) is error, len=%d.", len(data))
 		}
-		h, ok := data[0].(gin.HandlerFunc)
-		if !ok {
-			log.Fatalf("RegisterHandlers: handle is error, path=%s, data=%v.", path, data)
-		}
-		tmp, ok := data[1].(string)
+		tmp, ok := data[0].(string)
 		if !ok {
 			log.Fatalf("RegisterHandlers: method is not string, path=%s, data=%v.", path, data)
 		}
 		method := strings.ToUpper(tmp)
+
+		h, ok := data[1].(gin.HandlerFunc)
+		if !ok {
+			log.Fatalf("RegisterHandlers: handle is error, path=%s, data=%v.", path, data)
+		}
 		if method == "GET" {
 			r.GET(path, h)
 		} else {
