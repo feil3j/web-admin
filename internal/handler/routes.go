@@ -9,29 +9,33 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-//玩家信息路由表
-var playerRouters = map[string]gin.HandlerFunc{
-	"index": player.IndexHandler,
-	"basic": player.BasicHandler,
-	"task":  player.TaskHandler,
-}
+var (
+	//玩家信息路由表
+	playerRouters = map[string]gin.HandlerFunc{
+		"index": player.IndexHandler,
+		"basic": player.BasicHandler,
+		"task":  player.TaskHandler,
+	}
 
-//世界信息路由表
-var worldRouters = map[string]gin.HandlerFunc{
-	"index": world.IndexHandler,
-}
+	//世界信息路由表
+	worldRouters = map[string]gin.HandlerFunc{
+		"index": world.IndexHandler,
+	}
+)
 
 //注册路由
 func RegisterHandlers(r *gin.RouterGroup) {
 	//player route
 	for module, h := range playerRouters {
 		path := "/player/" + module
+		r.GET(path, h)
 		r.POST(path, h)
 	}
 
 	//world route
 	for module, h := range worldRouters {
 		path := "/world/" + module
+		r.GET(path, h)
 		r.POST(path, h)
 	}
 }
