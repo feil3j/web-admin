@@ -1,11 +1,208 @@
-{{ define "header" }}
-	<meta charset="UTF-8">	
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	<meta name="format-detection" content="telephone=no,email=no">
-	<title>{{ .Title }}</title>
-	<link rel="stylesheet" href="/public/css/common.css">
-	<script src="/public/lib/jquery-3.1.1.min.js"></script>
-    <script src="/public/lib/jquery.cookie.js"></script>
-    <link href="/public/css/font-awesome.css?v=4.4.0" rel="stylesheet">
-{{ end }}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title><{.title}></title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <!-- basic styles -->
+        <link href="<{.PATHPUBLIC}>/ace/css/bootstrap.min.css" rel="stylesheet" />
+        <link rel="stylesheet" href="<{.PATHPUBLIC}>/ace/css/font-awesome.min.css" />
+
+        <!--[if IE 7]>
+          <link rel="stylesheet" href="<{.PATHPUBLIC}>/ace/css/font-awesome-ie7.min.css" />
+        <![endif]-->
+
+        <!-- page specific plugin styles -->
+
+        <!-- fonts -->
+        <!--<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300" />-->
+        <!--<link rel="stylesheet" href="<{.PATHPUBLIC}>/ace/css/fonts.googlepis.css" />-->
+
+        <!-- ace styles -->
+        <link rel="stylesheet" href="<{.PATHPUBLIC}>/ace/css/ace.min.css" />
+        <link rel="stylesheet" href="<{.PATHPUBLIC}>/ace/css/ace-rtl.min.css" />
+        <link rel="stylesheet" href="<{.PATHPUBLIC}>/ace/css/ace-skins.min.css" />
+        <link rel="stylesheet" href="<{.PATHPUBLIC}>/ace/css/jquery-ui-1.10.3.full.min.css" />
+        <link rel="stylesheet" href="<{.PATHPUBLIC}>/css/loading.css" />
+
+        <!--[if lte IE 8]>
+          <link rel="stylesheet" href="<{.PATHPUBLIC}>/ace/css/ace-ie.min.css" />
+        <![endif]-->
+
+        <!-- inline styles related to this page -->
+
+        <!-- ace settings handler -->
+        <script src="<{.PATHPUBLIC}>/ace/js/ace-extra.min.js"></script>
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+        <!--[if lt IE 9]>
+        <script src="<{.PATHPUBLIC}>/ace/js/html5shiv.js"></script>
+        <script src="<{.PATHPUBLIC}>/ace/js/respond.min.js"></script>
+        <![endif]-->
+
+        <script type="text/javascript">
+            window.jQuery || document.write("<script src='<{.PATHPUBLIC}>/ace/js/jquery-1.10.2.min.js'>" + "<script>");
+        </script>
+        <!-- <![endif]-->
+        <!--[if IE]>
+        <script type="text/javascript">
+            window.jQuery || document.write("<script src='<{.PATHPUBLIC}>/ace/js/jquery-1.10.2.min.js'>"+"<script>");
+        </script>
+        <![endif]-->
+
+        <script type="text/javascript">
+            if ("ontouchend" in document)
+                document.write("<script src='<{.PATHPUBLIC}>/ace/js/jquery.mobile.custom.min.js'>" + "<script>");
+        </script>
+        <script src="<{.PATHPUBLIC}>/ace/js/bootstrap.min.js"></script> 
+        <script src="<{.PATHPUBLIC}>/ace/js/typeahead-bs2.min.js"></script>
+
+        <!-- ace scripts -->
+        <script src="<{.PATHPUBLIC}>/ace/js/ace-elements.min.js"></script>
+        <script src="<{.PATHPUBLIC}>/ace/js/ace.min.js"></script>
+
+        <!-- admin scripts -->
+        <script src="<{.PATHPUBLIC}>/js/admin.js"></script>
+        <script type="text/javascript">
+            var $PATHPREFIX = '<{.PATHPREFIX}>';
+            $(function() {
+                //sumbit提交统一加载loading
+                $('input[type="submit"]').click(function() {
+                    showLoading();
+                });
+            });
+            
+            /* 主菜单点击 */
+            function menuClick(controller, action) {
+                showLoading();
+                window.location.href = '<{.PATHPREFIX}>' + '/' + controller + '/' + action;
+            }
+
+            /* 显示遮罩层 */
+            function showLoading() {
+                $("#overlay").height(bodyHeight());
+                $("#overlay").width(bodyWidth());
+                $("#overlay").show();
+                $('.sk-fading-circle').show();
+            }
+
+            /* 隐藏覆盖层 */
+            function hideOverlay() {
+                $("#overlay").hide();
+            }
+            /* 当前页面高度 */
+            function bodyHeight() {
+                return document.body.scrollHeight;
+            }
+            /* 当前页面宽度 */
+            function bodyWidth() {
+                return document.body.scrollWidth;
+            }
+            /* 当前浏览器的宽度*/
+            function pageHeight() {
+                return window.screen.availHeight;
+            }
+            /* 当前浏览器的宽度*/
+            function pageWidth() {
+                return window.screen.availWidth;
+            }
+        </script>
+    </head>
+
+    <body>
+        <!--修改密码-->
+        <div id="editPassModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog" style="width:400px">
+                <form action="<{.PATHPREFIX}>/Role/editPassword" method="post">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title" id="myModalLabel">修改密码</h4>
+                        </div>
+                        <div class="modal-body">
+                            <input class="form-control" name="password" type="text" placeholder="请输入新的密码" />
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-sm btn-default" data-dismiss="modal">关闭</button>
+                            <button type="submit" class="btn btn-sm btn-primary">提交</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!--loading-->
+        <div id="overlay" class="overlay"></div>
+        <div class="sk-fading-circle">
+            <div class="sk-circle1 sk-circle"></div>
+            <div class="sk-circle2 sk-circle"></div>
+            <div class="sk-circle3 sk-circle"></div>
+            <div class="sk-circle4 sk-circle"></div>
+            <div class="sk-circle5 sk-circle"></div>
+            <div class="sk-circle6 sk-circle"></div>
+            <div class="sk-circle7 sk-circle"></div>
+            <div class="sk-circle8 sk-circle"></div>
+            <div class="sk-circle9 sk-circle"></div>
+            <div class="sk-circle10 sk-circle"></div>
+            <div class="sk-circle11 sk-circle"></div>
+            <div class="sk-circle12 sk-circle"></div>
+        </div>
+        
+        <div class="navbar navbar-default" id="navbar">
+            <script type="text/javascript">
+                try {
+                    ace.settings.check('navbar', 'fixed');
+                } catch (e) {
+                }
+                function editPassword() {
+                    $("#editPassModal").show();
+                }
+            </script>
+
+            <div id="navbar-container">
+                <div class="navbar-header pull-left">
+                    <a class="navbar-brand">
+                        <small>
+                            <i class="icon-leaf"></i>
+                            乐之鲸鱼-后台管理
+                            （<{.operator_name}>）
+                        </small>
+                    </a>
+                </div>
+
+                <div class="navbar-header pull-right">
+                    <ul class="nav ace-nav">
+                        <li class="light-blue">
+                            <a data-toggle="dropdown" href="#" class="dropdown-toggle">
+                                <{.userName}>,您好!
+                                <i class="icon-caret-down"></i>
+                            </a>
+                            <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+                                <li>
+                                    <a href="#" data-toggle="modal" data-target="#editPassModal">
+                                        <i class="icon-key"></i>
+                                        修改密码
+                                    </a>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <a href="<{.PATHPREFIX}>/Public/switchOperator">
+                                        <i class="icon-retweet"></i>
+                                        切换运营商
+                                    </a>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <a href="<{.PATHPREFIX}>/Public/signout">
+                                        <i class="icon-off"></i>
+                                        退出
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>

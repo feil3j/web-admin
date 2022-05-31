@@ -1,0 +1,120 @@
+<div class="sidebar" id="sidebar">
+    <script type="text/javascript">
+        try {
+            ace.settings.check('sidebar', 'fixed')
+        } catch (e) {}
+    </script>
+
+    <div class="sidebar-shortcuts" id="sidebar-shortcuts">
+        <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
+            <button class="btn btn-success">
+                <i class="icon-signal"></i>
+            </button>
+            <button class="btn btn-info">
+                <i class="icon-pencil"></i>
+            </button>
+            <button class="btn btn-warning">
+                <i class="icon-group"></i>
+            </button>
+            <button class="btn btn-danger" data-toggle="modal" data-target="#myModal">
+                <i class="icon-cogs"></i>
+            </button>
+        </div>
+
+        <div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
+            <span class="btn btn-success"></span>
+            <span class="btn btn-info"></span>
+            <span class="btn btn-warning"></span>
+            <span class="btn btn-danger"></span>
+        </div>
+    </div>
+
+    <ul class="nav nav-list">
+        <li <{if $controller == 'Index'}> class="active" <{/if}>>
+            <a href="<{.PATHPREFIX}>/Index/index">
+                <i class="icon-dashboard"></i>
+                <span class="menu-text"> 控制台 </span>
+            </a>
+        </li>
+        <{foreach $menu as $v}>
+            <li <{if $controller|cat:$action == $v.controller|cat:$v.action}> class="active" <{elseif $controller == $v.controller}> class="active open" <{/if}>>
+                <{if count($v["sonlist"]) > 0}>
+                <a href="#" class="dropdown-toggle">
+                    <i class="<{.v['icon']}>"></i>
+                    <span class="menu-text"><{.v['name']}></span>
+                    <b class="arrow icon-angle-down"></b>
+                </a>
+                <ul class="submenu">
+                    <{foreach $v['sonlist'] as $vo}>
+                    <li <{if $controller|cat:$action == $vo.controller|cat:$vo.action}> class="active" <{/if}>>
+                        <a href="#" onclick="menuClick('<{.vo.controller}>', '<{.vo.action}>')">
+                            <i class="icon-double-angle-right"></i>
+                            <{.vo['name']}>
+                        </a>
+                    </li>
+                    <{/foreach}>
+                </ul>
+                <{else}>
+                <a href="#" onclick="menuClick('<{.v.controller}>', '<{.v.action}>')">
+                    <i class="<{.v['icon']}>"></i>
+                    <span class="menu-text"><{.v['name']}></span>
+                </a>
+                <{/if}>
+            </li>
+        <{/foreach}>
+    </ul>
+
+    <div class="sidebar-collapse" id="sidebar-collapse">
+        <i class="icon-double-angle-left" data-icon1="icon-double-angle-left" data-icon2="icon-double-angle-right"></i>
+    </div>
+
+    <div id="myModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">分区切换</h4>
+                </div>
+                <div class="modal-body" style="height:<{.bodyHeight}>px;font-family:微软雅黑">
+                    <{foreach $areaInfo as $v}>
+                    <div style="width:120px;height:50px;float:left">
+                        <input name="area_radio" type="radio" value="<{.v['area_id']}>" class="ace" <{if $area_id == $v['area_id']}>checked="true"<{/if}> />
+                        <span class="lbl"></span>
+                        <span class="label label-success arrowed" style="margin-top:5px"><{.v['name']}></span>
+                    </div>
+                    <{/foreach}>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary btn-sm" onclick="cutoverArea()">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        try {
+            ace.settings.check('sidebar', 'collapsed');
+        } catch (e) {}
+    </script>
+
+    <script type="text/javascript">
+        function cutoverArea() {
+            var area_id = $('input[name="area_radio"]:checked').val();
+            $.ajax({
+                type : 'POST',
+                url : "<{.PATHPREFIX}>/Ajax/cutoverArea",
+                data : {area_id : area_id},
+                dataType : 'json',
+                async : false,
+                success : function(data) {
+                    if (data === 1) {
+                        alert("切换成功，当前区为：" + area_id + "区");
+                        window.location.reload();
+                    } else {
+                        alert(data);
+                    }
+                }
+            });
+        }
+    </script>
+</div>

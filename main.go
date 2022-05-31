@@ -25,6 +25,7 @@ func main() {
 	log.Printf("main: globalConfig=%v", globalConfig)
 
 	router := gin.Default()
+	router.Delims("<{", "}>")
 
 	// 静态资源加载，例如css,js以及资源图片
 	router.StaticFS("/public", http.Dir(globalConfig.AdminRootPath+"/internal/view/static"))

@@ -1,0 +1,84 @@
+template "header.html" .header>
+<div class="main-container" id="main-container">
+    <script type="text/javascript">
+        try {
+            ace.settings.check('main-container', 'fixed')
+        } catch (e) {}
+    </script>
+
+    <div class="main-container-inner">
+        <a class="menu-toggler" id="menu-toggler" href="#">
+            <span class="menu-text"></span>
+        </a>
+        
+        <!-- 菜单 -->
+        <{template "menu.html" .}>
+        
+        <!-- 内容 -->
+        <div class="main-content">
+            <div class="breadcrumbs" id="breadcrumbs">
+                <script type="text/javascript">
+                    try {
+                        ace.settings.check('breadcrumbs', 'fixed')
+                    } catch (e) {}
+                    
+                    var offset = '<{.offset}>';
+                    function mytime(offset) {
+                        d = new Date();
+                        localTime = d.getTime();
+                        localOffset = d.getTimezoneOffset() * 60000;
+                        utc = localTime + localOffset;
+                        gtm = utc + (3600000 * offset);
+                        nd = new Date(gtm);
+                        $('#timenow').html(nd.toLocaleString('chinese',{hour12:false}));
+                    }
+                    
+                    setInterval(function () {
+                        mytime(offset);
+                    }, 1000);
+
+                    $(function() {
+                        mytime(offset);
+                    });
+                </script>
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="icon-home home-icon"></i>
+                        <a href="#">Home</a>
+                    </li>
+                    <li class="active"><{.page_title}></li>
+                </ul>
+                <div style="position:relative;float:right;color:#19900d">
+                    服务器时间：<span id="timenow" ></span>
+                </div>
+            </div>
+            <div class="page-content">
+                <div class="page-header">
+                    <h1><{.page_title}></h1>
+                </div>
+                <{.content}>
+            </div>
+        </div>
+    </div>
+    
+    <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+        <i class="icon-double-angle-up icon-only bigger-110"></i>
+    </a>
+</div>
+<div class="modal fade" id="delConfirm" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" style="width:400px;margin-top:100px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aira-hidden="true">×</span>
+                </button>
+                <h3 class="modal-title">确认删除？</h3>
+            </div>
+            <div class="modal-footer" style="margin-top:0px">
+                <button class="btn btn-sm" data-dismiss="modal">Cancel</button>
+                <a id="del-btn" href="" class="btn btn-sm btn-danger">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+<{template "footer.html" .footer}>
