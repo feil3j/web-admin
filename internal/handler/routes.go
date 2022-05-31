@@ -3,41 +3,36 @@
 package handler
 
 import (
-	"log"
 	"src/web-admin/internal/handler/player"
-	"strings"
+	"src/web-admin/internal/handler/world"
 
 	"github.com/gin-gonic/gin"
 )
 
-//路由表
-var routers = map[string][]interface{}{
-	"/index.html":         {"GET", player.IndexHandler},
-	"/player/:id/*action": {"GET", player.AddHandler},
-	"/player/post.html":   {"POST", player.PostmeHandler},
+//玩家信息路由表
+var playerRouters = map[string]gin.HandlerFunc{
+	"index": player.IndexHandler,
+	"basic": player.BasicHandler,
+	"task":  player.TaskHandler,
+}
+
+//世界信息路由表
+var worldRouters = map[string]gin.HandlerFunc{
+	"index": world.IndexHandler,
 }
 
 //注册路由
 func RegisterHandlers(r *gin.RouterGroup) {
-	for path, data := range routers {
-		if len(data) != 2 {
-			log.Fatalf("RegisterHandlers: len(data) is error, len=%d.", len(data))
-		}
-		tmp, ok := data[0].(string)
-		if !ok {
-			log.Fatalf("RegisterHandlers: method is not string, path=%s, data=%v.", path, data)
-		}
-		method := strings.ToUpper(tmp)
+	//player route
+	for module, h := range playerRouters {
+		path := "/player/" + module
+		r.POST(path, h)
+	}
 
-		h, ok := data[1].(gin.HandlerFunc)
-		if !ok {
-			log.Fatalf("RegisterHandlers: handle is error, path=%s, data=%v.", path, data)
-		}
-		if method == "GET" {
-			r.GET(path, h)
-		} else {
-			r.POST(path, h)
-		}
+	//world route
+	for module, h := range worldRouters {
+		path := "/world/" + module
+		r.POST(path, h)
 	}
 }
 

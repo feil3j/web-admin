@@ -11,13 +11,13 @@ import (
 
 type Addr struct {
 	Host string `json:"host"`
-	Port int32  `json:"port"`
+	Port string `json:"port"`
 }
 
 type Config struct {
 	AdminRootPath string
 	Name          string `json:"name"`
-	Server        Addr   `json:"addr"`
+	Server        Addr   `json:"server"`
 }
 
 var GlobalConfig *Config

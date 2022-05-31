@@ -42,7 +42,7 @@ func main() {
 	handler.RegisterHandlers(r)
 
 	//启动服务
-	addr := globalConfig.Server.Host + ":" + globalConfig.Server.Host
+	addr := globalConfig.Server.Host + ":" + globalConfig.Server.Port
 	srv := &http.Server{
 		Addr:         addr,
 		Handler:      router,
