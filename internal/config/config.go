@@ -1,12 +1,16 @@
 package config
 
 import (
+	"bytes"
 	"encoding/json"
+	"html/template"
 	"io/ioutil"
 	"log"
 	"os"
 	"path"
 	"runtime"
+
+	"github.com/gin-gonic/gin"
 )
 
 type Addr struct {
@@ -18,6 +22,7 @@ type Config struct {
 	AdminRootPath string
 	Name          string `json:"name"`
 	Server        Addr   `json:"server"`
+	HtmlTemplate  *template.Template
 }
 
 var GlobalConfig *Config
@@ -42,6 +47,16 @@ func LoadConfig(fileName *string) *Config {
 		log.Fatalf("loadConfig: json.Unmarshal error, fileName=%s, err=%v.", fileName, err)
 	}
 	return GlobalConfig
+}
+
+func SetHtmlTemplate(templ *template.Template) {
+	GlobalConfig.HtmlTemplate = templ
+}
+
+func GetTemplateData(tplName string, data gin.H) string {
+	writer := bytes.Buffer{}
+	GlobalConfig.HtmlTemplate.ExecuteTemplate(&writer, tplName, data)
+	return writer.String()
 }
 
 func getRootPath() string {

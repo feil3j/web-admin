@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"flag"
+	"html/template"
 	"log"
 	"net/http"
 	"os"
@@ -25,14 +26,16 @@ func main() {
 	log.Printf("main: globalConfig=%v", globalConfig)
 
 	router := gin.Default()
-	router.Delims("<{", "}>")
 
 	// 静态资源加载，例如css,js以及资源图片
 	router.StaticFS("/public", http.Dir(globalConfig.AdminRootPath+"/internal/view/static"))
 	router.StaticFile("/favicon.ico", globalConfig.AdminRootPath+"/internal/view/static/icon/favicon.ico")
 
 	// 导入所有模板，多级目录结构需要这样写
-	router.LoadHTMLGlob(globalConfig.AdminRootPath + "/internal/view/tpl/*/*")
+	pattern := globalConfig.AdminRootPath + "/internal/view/tpl/*/*"
+	templ := template.Must(template.New("").Delims("<{", "}>").ParseGlob(pattern))
+	router.SetHTMLTemplate(templ)
+	config.SetHtmlTemplate(templ)
 
 	// 使用全局CORS中间件。
 	router.Use(handler.Cors())
