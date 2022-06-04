@@ -1,23 +1,14 @@
 package player
 
 import (
-	"net/http"
-
-	"crypto/md5"
-	"encoding/hex"
-	"strconv"
-	"time"
+	"src/web-admin/internal/handler/base"
 
 	"github.com/gin-gonic/gin"
 )
 
 func TaskHandler(c *gin.Context) {
-	time := time.Now().Unix()
-	h := md5.New()
-	h.Write([]byte(strconv.FormatInt(time, 10)))
-	token := hex.EncodeToString(h.Sum(nil))
-	c.HTML(http.StatusOK, "add.html", gin.H{
-		"Title": "task",
-		"token": token,
+	base.Display(c, "player_task.html", gin.H{
+		"Title": "basic",
+		"token": "abcd",
 	})
 }
