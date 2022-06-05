@@ -32,15 +32,15 @@
     <ul class="nav nav-list">
         <{$controller := .controller}>
         <{$action := .action}>
-        <li <{if eq $controller 'index'}> class="active" <{end}>>
+        <li <{if eq $controller "index"}> class="active" <{end}>>
             <a href="<{.PATHPREFIX}>/index/index">
                 <i class="icon-dashboard"></i>
                 <span class="menu-text"> 控制台 </span>
             </a>
         </li>
         <{range $_, $v := .menu}>
-            <li <{if $action == $v.action}> class="active" <{elseif $controller == $v.controller}> class="active open" <{end}>>
-                <{if len $v.Sonlist) > 0}>
+            <li <{if eq $action $v.action}> class="active" <{else if eq $controller $v.controller}> class="active open" <{end}>>
+                <{if len $v.Sonlist | lt 0}>
                 <a href="#" class="dropdown-toggle">
                     <i class="<{$v.Icon}>"></i>
                     <span class="menu-text"><{$v.Name}></span>
@@ -48,7 +48,7 @@
                 </a>
                 <ul class="submenu">
                     <{range $vo := $v.Sonlist}>
-                    <li <{if $action == $vo.action}> class="active" <{end}>>
+                    <li <{if eq $action $vo.action}> class="active" <{end}>>
                         <a href="#" onclick="menuClick('<{$vo.Controller}>', '<{$vo.Action}>')">
                             <i class="icon-double-angle-right"></i>
                             <{$vo.Name}>
@@ -80,7 +80,7 @@
                     <{$area_id := .area_id}>
                     <{range $v := .areaInfo}>
                     <div style="width:120px;height:50px;float:left">
-                        <input name="area_radio" type="radio" value="<{$v.AreaId}>" class="ace" <{if eq $area_id == $v.AreaId}>checked="true"<{end}> />
+                        <input name="area_radio" type="radio" value="<{$v.AreaId}>" class="ace" <{if eq $area_id $v.AreaId}>checked="true"<{end}> />
                         <span class="lbl"></span>
                         <span class="label label-success arrowed" style="margin-top:5px"><{$v.Name}></span>
                     </div>
