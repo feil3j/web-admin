@@ -19,9 +19,11 @@ func Display(c *gin.Context, tplName string, data gin.H) {
 		content = config.GetTemplateData(tplName, data)
 	}
 	params := gin.H{
-		"header":  header,
-		"footer":  footer,
-		"content": content,
+		"header":     header,
+		"menu":       menu,
+		"footer":     footer,
+		"content":    content,
+		"PATHPREFIX": "/",
 	}
 	c.HTML(http.StatusOK, "index.html", params)
 }

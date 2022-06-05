@@ -23,7 +23,7 @@ func main() {
 	configFile := flag.String("f", "./src/web-admin/etc/admin.conf", "the config file")
 	flag.Parse()
 	globalConfig := config.LoadConfig(configFile)
-	log.Printf("main: globalConfig=%v", globalConfig)
+	log.Printf("main: globalConfig=%#v", globalConfig)
 
 	router := gin.Default()
 

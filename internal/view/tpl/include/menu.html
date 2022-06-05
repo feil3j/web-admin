@@ -30,38 +30,40 @@
     </div>
 
     <ul class="nav nav-list">
-        <li <{if $controller == 'Index'}> class="active" <{/if}>>
-            <a href="<{.PATHPREFIX}>/Index/index">
+        <{$controller := .controller}>
+        <{$action := .action}>
+        <li <{if eq $controller 'index'}> class="active" <{end}>>
+            <a href="<{.PATHPREFIX}>/index/index">
                 <i class="icon-dashboard"></i>
                 <span class="menu-text"> 控制台 </span>
             </a>
         </li>
-        <{foreach $menu as $v}>
-            <li <{if $controller|cat:$action == $v.controller|cat:$v.action}> class="active" <{elseif $controller == $v.controller}> class="active open" <{/if}>>
-                <{if count($v["sonlist"]) > 0}>
+        <{range $_, $v := .menu}>
+            <li <{if $action == $v.action}> class="active" <{elseif $controller == $v.controller}> class="active open" <{end}>>
+                <{if len $v.Sonlist) > 0}>
                 <a href="#" class="dropdown-toggle">
-                    <i class="<{.v['icon']}>"></i>
-                    <span class="menu-text"><{.v['name']}></span>
+                    <i class="<{$v.Icon}>"></i>
+                    <span class="menu-text"><{$v.Name}></span>
                     <b class="arrow icon-angle-down"></b>
                 </a>
                 <ul class="submenu">
-                    <{foreach $v['sonlist'] as $vo}>
-                    <li <{if $controller|cat:$action == $vo.controller|cat:$vo.action}> class="active" <{/if}>>
-                        <a href="#" onclick="menuClick('<{.vo.controller}>', '<{.vo.action}>')">
+                    <{range $vo := $v.Sonlist}>
+                    <li <{if $action == $vo.action}> class="active" <{end}>>
+                        <a href="#" onclick="menuClick('<{$vo.Controller}>', '<{$vo.Action}>')">
                             <i class="icon-double-angle-right"></i>
-                            <{.vo['name']}>
+                            <{$vo.Name}>
                         </a>
                     </li>
-                    <{/foreach}>
+                    <{end}>
                 </ul>
                 <{else}>
-                <a href="#" onclick="menuClick('<{.v.controller}>', '<{.v.action}>')">
-                    <i class="<{.v['icon']}>"></i>
-                    <span class="menu-text"><{.v['name']}></span>
+                <a href="#"">
+                    <i class="<{$v.Icon}>"></i>
+                    <span class="menu-text"><{$v.Name}></span>
                 </a>
-                <{/if}>
+                <{end}>
             </li>
-        <{/foreach}>
+        <{end}>
     </ul>
 
     <div class="sidebar-collapse" id="sidebar-collapse">
@@ -75,13 +77,14 @@
                     <h4 class="modal-title" id="myModalLabel">分区切换</h4>
                 </div>
                 <div class="modal-body" style="height:<{.bodyHeight}>px;font-family:微软雅黑">
-                    <{foreach $areaInfo as $v}>
+                    <{$area_id := .area_id}>
+                    <{range $v := .areaInfo}>
                     <div style="width:120px;height:50px;float:left">
-                        <input name="area_radio" type="radio" value="<{.v['area_id']}>" class="ace" <{if $area_id == $v['area_id']}>checked="true"<{/if}> />
+                        <input name="area_radio" type="radio" value="<{$v.AreaId}>" class="ace" <{if eq $area_id == $v.AreaId}>checked="true"<{end}> />
                         <span class="lbl"></span>
-                        <span class="label label-success arrowed" style="margin-top:5px"><{.v['name']}></span>
+                        <span class="label label-success arrowed" style="margin-top:5px"><{$v.Name}></span>
                     </div>
-                    <{/foreach}>
+                    <{end}>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">关闭</button>
